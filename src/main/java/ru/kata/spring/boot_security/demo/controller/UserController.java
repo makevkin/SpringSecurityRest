@@ -5,22 +5,22 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
+import ru.kata.spring.boot_security.demo.service.UserService;
 
 import java.security.Principal;
 import java.util.Optional;
 
 @Controller
 public class UserController {
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
-    @GetMapping("/user")
-    public String userInfo(Model model, Principal principal) {
+    @GetMapping("api/user")
+    public User userInfo( Principal principal) {
         String username = principal.getName();
-        User user = userRepository.findByUsername(username).get();
-        model.addAttribute("user", user);
-        return "user";
+        User user = userService.findByUsername(username).get();
+        return user;
     }
 }

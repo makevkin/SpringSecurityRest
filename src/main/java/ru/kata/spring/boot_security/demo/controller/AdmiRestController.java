@@ -27,9 +27,16 @@ public class AdmiRestController {
     public List<User> allUsers() {
         return userService.findAll();
     }
+
     @GetMapping("/{id}")
     public User findUserById(@PathVariable("id") Long id) {
         return userService.findById(id).get();
+    }
+
+    @PostMapping("/addUser")
+    public ResponseEntity<HttpStatus> addUser(@RequestBody @Valid User user, BindingResult bindingResult) {
+        userService.save(user);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @DeleteMapping("/deleteUser/{id}")
