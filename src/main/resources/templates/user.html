@@ -12,11 +12,12 @@
 
 <nav  class="navbar navbar-light" style="background-color: dimgrey">
     <div class="container-fluid">
-        <div class="navbar-nav mr-auto" id="user">
-            <span>
-                <h3 id="userrr"></h3>
-            </span>
+        <div>
+            <a class="navbar-brand">
+            <span class="h5" id="username"></span> with role:<span class="h5" id="role"></span>
+            </a>
         </div>
+
         <form th:action="@{/logout}"  th:method="post">
             <button class="btn btn-outline-light ms-auto" style="background: dimgrey" >Logout</button>
         </form>
