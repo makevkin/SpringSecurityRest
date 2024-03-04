@@ -56,13 +56,13 @@ async function newUser() {
                 if (formAddNewUser.roles.options[i].selected) {
                     rolesNewUser.push({
                     id: formAddNewUser.roles.options[i].value,
-                    name: formAddNewUser.roles.options[i].name
+                    name: formAddNewUser.roles.options[i].text
                 })
                 break
                 }
             }
 
-            fetch('http://localhost:8088/api/admin/addUser', {
+            fetch('http://localhost:8080/api/admin/addUser', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
@@ -84,7 +84,7 @@ async function newUser() {
 
 // Получаем пользователя по id
 async function getUser(id) {
-    let url = 'http://localhost:8088/api/admin/' + id;
+    let url = 'http://localhost:8080/api/admin/' + id;
     let response = await fetch(url)
     return await response.json()
 }
@@ -95,7 +95,7 @@ function deleteUser() {
     const formDelete = document.forms["formDelete"]
     formDelete.addEventListener("submit", function (event) {
         event.preventDefault()
-        fetch("http://localhost:8088/api/admin/deleteUser/" + formDelete.id.value, {
+        fetch("http://localhost:8080/api/admin/deleteUser/" + formDelete.id.value, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'
@@ -105,9 +105,7 @@ function deleteUser() {
                 $('#deleteFormCloseButton').click()
                 allUsers()
             })
-            .catch((error) => {
-                alert(error)
-            })
+
     })
 }
 
@@ -128,7 +126,7 @@ async function viewDeleteModal(id) {
 
     $('#deleteRolesUser').empty()
 
-    await fetch("http://localhost:8088/api/admin/roles")
+    await fetch("http://localhost:8080/api/admin/roles")
         .then(r => r.json())
         .then(roles => {
             roles.forEach(role => {
@@ -146,7 +144,5 @@ async function viewDeleteModal(id) {
                 $('#deleteRolesUser')[0].appendChild(element)
             })
         })
-        .catch((error) => {
-            alert(error)
-        })
+
 }
