@@ -58,17 +58,13 @@ async function newUser() {
     const response = await fetch(url2)
     const roles = await response.json()
     roles.forEach(role => {
-        let element = document.createElement("option");
+        let element = document.createElement('option');
         element.text = role.name.substring(5);
         element.value = role.id;
         $('#rolesNewUser')[0].appendChild(element);
     })
-
-
-
-
-    const formAddNewUser = document.forms["formAddNewUser"];
-
+    //  Выбор роли для user
+    const formAddNewUser = document.forms['formAddNewUser'];
     formAddNewUser.addEventListener('submit', function (event) {
         event.preventDefault();
         let rolesNewUser = [];
@@ -79,11 +75,9 @@ async function newUser() {
             })
         }
 
-        fetch("http://localhost:8088/api/admin/addUser", {
+        fetch('http://localhost:8088/api/admin/addUser', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
                 username: formAddNewUser.username.value,
                 password: formAddNewUser.password.value,
@@ -108,5 +102,5 @@ async function getUser(id) {
     return await response.json();
 }
 
-//  Модальное окно редактирования пользователя
+//  Модальное окно удаления пользователя
 

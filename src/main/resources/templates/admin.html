@@ -49,10 +49,11 @@
                     <h1>Admin panel</h1>
                     <ul class="nav nav-tabs" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" href ="#allUsers" >Users table</a>
+                            <a class="nav-link active" data-toggle="tab" href="#allUsers" id="allUsersTable">
+                                Users table</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href = "#addUser">New User</a>
+                            <a class="nav-link" data-toggle="tab" href = "#addUser">New User</a>
                         </li>
                     </ul>
 
@@ -81,11 +82,12 @@
                             <!--  Вкладка добавления пользователя-->
                             <div  class="tab-pane fade show" id="addUser" role="tabpanel">
                                 <div class="card">
-                                    <h2 class="card-text">Add new user</h2>
+                                    <h2 class="card-header">Add new user</h2>
                                     <div class="card-body">
                                         <div class="container-fluid">
                                             <div class="row justify-content-center align-items-center">
                                                 <div class="form-group text-center col-lg-3">
+                                                    <!-- Вложенная форма для ввода данных пользователя-->
                                                     <form class="form-group text-center font-weight-bold"
                                                           name="formAddNewUser" id="formAddNewUser">
                                                         <label for="usernameNewUser">Username</label>
@@ -94,13 +96,15 @@
                                                         <br>
                                                         <label for="passwordNewUser">Password</label>
                                                         <input type="text" class="form-control" name="password"
-                                                               id="passwordNewUser" placeholder="Password"/>
+                                                               id="passwordNewUser" placeholder="password"/>
                                                         <br>
+                                                        <div>
                                                         <label for="rolesNewUser">Role</label>
                                                         <select class="form-control" name="roles" id="rolesNewUser"
                                                                 multiple size="2">
                                                         </select>
                                                         <br>
+                                                        </div>
                                                         <button type="submit" id="newUserAddButton"
                                                                 class="btn btn-success">Add new user
                                                         </button>
