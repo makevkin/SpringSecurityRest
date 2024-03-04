@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Admin panel</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -17,10 +18,10 @@
 <body>
 <nav  class="navbar navbar-light" style="background-color: dimgrey">
     <div class="container-fluid">
-        <div class="navbar-nav mr-auto" id="user">
-            <span>
-                <h3 id="userrr"></h3>
-            </span>
+        <div>
+            <a class="navbar-brand">
+                <span class="h5" id="username1"></span> with role:<span class="h5" id="role1"></span>
+            </a>
         </div>
         <form th:action="@{/logout}"  th:method="post">
             <button class="btn btn-outline-light ms-auto" style="background: dimgrey" >Logout</button>
@@ -60,7 +61,7 @@
                             <!-- Основная панель с информацией вкладка users tаble-->
                             <div class="tab-pane fade show active" role="tabpanel" id="allUsers">
                                 <div class="card">
-                                    <h2 class="card-text">All Users</h2>
+                                    <h2 class="card-header">All Users</h2>
                                     <div class="card-body">
                                     <table class="table table-striped">
                                         <thead>
