@@ -23,7 +23,7 @@
 // }
 // allUsers()
 
-
+// Вкладка User table  //
 const url1 ='http://localhost:8080/api/admin'
 async function allUsers() {
     try {
@@ -50,5 +50,63 @@ async function allUsers() {
             console.error(e)
         }
 }
-
 allUsers()
+
+// Вкладка New User
+const url2 ='http://localhost:8080/api/admin/roles'
+async function newUser() {
+    const response = await fetch(url2)
+    const roles = await response.json()
+    roles.forEach(role => {
+        let element = document.createElement("option");
+        element.text = role.name.substring(5);
+        element.value = role.id;
+        $('#rolesNewUser')[0].appendChild(element);
+    })
+
+
+
+
+    const formAddNewUser = document.forms["formAddNewUser"];
+
+    formAddNewUser.addEventListener('submit', function (event) {
+        event.preventDefault();
+        let rolesNewUser = [];
+        for (let i = 0; i < formAddNewUser.roles.options.length; i++) {
+            if (formAddNewUser.roles.options[i].selected) rolesNewUser.push({
+                id: formAddNewUser.roles.options[i].value,
+                name: formAddNewUser.roles.options[i].name
+            })
+        }
+
+        fetch("http://localhost:8088/api/admin/addUser", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username: formAddNewUser.username.value,
+                password: formAddNewUser.password.value,
+                roles: rolesNewUser
+            })
+        }).then(() => {
+            formAddNewUser.reset();
+            allUsers();
+            $('#allUsersTable').click();
+        })
+            .catch((error) => {
+                alert(error);
+            })
+    })
+
+}
+
+// Получаем пользователя по id
+async function getUser(id) {
+    let url = 'http://localhost:8088/api/admin/' + id;
+    let response = await fetch(url);
+    return await response.json();
+}
+
+//  Модальное окно редактирования пользователя
+
