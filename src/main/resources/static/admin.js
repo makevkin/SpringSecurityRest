@@ -40,7 +40,7 @@ async function allUsers() {
 
 
 // Вкладка New User
-const url2 ='http://localhost:8080/api/admin/roles'
+
 async function newUser() {
     try {   // получение списка ролей
         const response = await fetch(url+'/roles')
@@ -92,7 +92,6 @@ async function getUser(id) {
 }
 
 //  Модальное окно удаления пользователя
-
 function deleteUser() {
     const formDelete = document.forms["formDelete"]
     formDelete.addEventListener("submit", function (event) {
@@ -154,10 +153,13 @@ function editUser() {
         event.preventDefault()
         let editUserRoles = []
         for (let i = 0; i < editForm.roles.options.length; i++) {
-            if (editForm.roles.options[i].selected) editUserRoles.push({
-                id: editForm.roles.options[i].value,
-                name: editForm.roles.options[i].name
-            })
+            if (editForm.roles.options[i].selected) {
+                editUserRoles.push({
+                    id: editForm.roles.options[i].value,
+                    name: editForm.roles.options[i].name
+
+                })
+            }
         }
 
         fetch(url + '/update/' + editForm.id.value, {
