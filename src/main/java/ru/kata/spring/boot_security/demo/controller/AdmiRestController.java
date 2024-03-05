@@ -34,7 +34,7 @@ public class AdmiRestController {
     }
 
     @PostMapping("/addUser")
-    public ResponseEntity<HttpStatus> addUser(@RequestBody @Valid User user, BindingResult bindingResult) {
+    public ResponseEntity<HttpStatus> addUser(@RequestBody @Valid User user) {
         userService.save(user);
         return ResponseEntity.ok(HttpStatus.OK);
     }

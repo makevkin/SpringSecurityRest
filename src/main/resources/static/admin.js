@@ -3,14 +3,18 @@
 $(async function () {
     await  allUsers()
     await newUser()
+    deleteUser()
+    editUser()
 })
 
 
 // Вкладка User table  //
-const url1 ='http://localhost:8080/api/admin'
+const url ='http://localhost:8080/api/admin'
 async function allUsers() {
+    const table = $('#bodyAllUserTable')
+    table.empty()
     try {
-        const response = await fetch(url1)
+        const response = await fetch(url)
         const data = await response.json()
         data.forEach(user => {
             let users = `$(
@@ -39,11 +43,11 @@ async function allUsers() {
 const url2 ='http://localhost:8080/api/admin/roles'
 async function newUser() {
     try {   // получение списка ролей
-        const response = await fetch(url2)
+        const response = await fetch(url+'/roles')
         const roles = await response.json()
         roles.forEach(role => {
             let element = document.createElement('option')
-            element.text = role.name.substring(5)
+            element.text = role.name
             element.value = role.id
             $('#rolesNewUser')[0].appendChild(element)
         })
@@ -61,8 +65,7 @@ async function newUser() {
                 break
                 }
             }
-
-            fetch('http://localhost:8080/api/admin/addUser', {
+            fetch(url+'/addUser', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
@@ -84,8 +87,7 @@ async function newUser() {
 
 // Получаем пользователя по id
 async function getUser(id) {
-    let url = 'http://localhost:8080/api/admin/' + id;
-    let response = await fetch(url)
+    let response = await fetch(url + '/' + id)
     return await response.json()
 }
 
@@ -95,7 +97,7 @@ function deleteUser() {
     const formDelete = document.forms["formDelete"]
     formDelete.addEventListener("submit", function (event) {
         event.preventDefault()
-        fetch("http://localhost:8080/api/admin/deleteUser/" + formDelete.id.value, {
+        fetch(url + '/deleteUser/' + formDelete.id.value, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'
@@ -105,11 +107,9 @@ function deleteUser() {
                 $('#deleteFormCloseButton').click()
                 allUsers()
             })
-
     })
 }
-
-
+// открываем модальное окно удаления с нужным пользователем
 $(document).ready(function () {
     $('#delete').on("show.bs.modal", function (event) {
         const button = $(event.relatedTarget)
@@ -145,4 +145,78 @@ async function viewDeleteModal(id) {
             })
         })
 
+}
+
+//  редактирование пользователя
+function editUser() {
+    const editForm = document.forms["formEdit"]
+    editForm.addEventListener("submit", function (event) {
+        event.preventDefault()
+        let editUserRoles = []
+        for (let i = 0; i < editForm.roles.options.length; i++) {
+            if (editForm.roles.options[i].selected) editUserRoles.push({
+                id: editForm.roles.options[i].value,
+                name: editForm.roles.options[i].name
+            })
+        }
+
+        fetch(url + '/update/' + editForm.id.value, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id: editForm.id.value,
+                username: editForm.username.value,
+                password: editForm.password.value,
+                roles: editUserRoles
+            })
+        }).then(() => {
+            $('#editFormCloseButton').click()
+            allUsers()
+        })
+            .catch((error) => {
+                alert(error)
+            })
+    })
+}
+
+$(document).ready(function () {
+    $('#edit').on("show.bs.modal", function (event) {
+        const button = $(event.relatedTarget)
+        const id = button.data("id")
+        viewEditModal(id)
+    })
+})
+
+async function viewEditModal(id) {
+    let userEdit = await getUser(id)
+    let form = document.forms["formEditUser"]
+    form.id.value = userEdit.id
+    form.username.value = userEdit.username
+    form.password.value = userEdit.password
+
+    $('#editRolesUser').empty()
+
+    await fetch(url + '/roles')
+        .then(r => r.json())
+        .then(roles => {
+            roles.forEach(role => {
+                let selectedRole = false;
+                for (let i = 0; i < userEdit.roles.length; i++) {
+                    if (userEdit.roles[i].name === role.name) {
+                        selectedRole = true
+                        break
+                    }
+                }
+                let element = document.createElement("option")
+                element.text = role.name.substring(5)
+                element.value = role.id
+                if (selectedRole) element.selected = true
+                $('#editRolesUser')[0].appendChild(element)
+            })
+        })
+        .catch((error) => {
+            alert(error);
+        })
 }
