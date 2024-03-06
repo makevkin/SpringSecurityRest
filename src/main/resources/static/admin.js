@@ -1,15 +1,11 @@
-// const url1 ='http://localhost:8080/api/admin'
-//
 $(async function () {
     await  allUsers()
     await newUser()
     deleteUser()
     editUser()
 })
-
-
-// Вкладка User table  //
 const url ='http://localhost:8080/api/admin'
+// Вкладка User table  //
 async function allUsers() {
     const table = $('#bodyAllUserTable')
     table.empty()
@@ -38,9 +34,7 @@ async function allUsers() {
         }
 }
 
-
 // Вкладка New User
-
 async function newUser() {
     try {   // получение списка ролей
         const response = await fetch(url+'/roles')
@@ -93,20 +87,24 @@ async function getUser(id) {
 
 //   Удаление пользователя
 function deleteUser() {
-    const formDelete = document.forms["formDelete"]
-    formDelete.addEventListener("submit", function (event) {
-        event.preventDefault()
-        fetch(url + '/deleteUser/' + formDelete.id.value, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(() => {
-                $('#deleteFormCloseButton').click()
-                allUsers()
+    try {
+        const formDelete = document.forms["formDelete"]
+        formDelete.addEventListener("submit", function (event) {
+            event.preventDefault()
+            fetch(url + '/deleteUser/' + formDelete.id.value, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
             })
-    })
+                .then(() => {
+                    $('#deleteFormCloseButton').click()
+                    allUsers()
+                })
+        })
+    } catch (e) {
+        console.error(e)
+    }
 }
 // открываем модальное окно удаления с нужным пользователем
 $(document).ready(function () {
@@ -124,26 +122,26 @@ async function viewDeleteModal(id) {
     formDelete.username.value = userDelete.username
 
     $('#deleteRolesUser').empty()
-
-    await fetch("http://localhost:8080/api/admin/roles")
-        .then(r => r.json())
-        .then(roles => {
-            roles.forEach(role => {
-                let selectedRole = false
-                for (let i = 0; i < userDelete.roles.length; i++) {
-                    if (userDelete.roles[i].name === role.name) {
-                        selectedRole = true
-                        break
-                    }
+    try {
+        const response = await fetch(url + '/roles')
+        const roles = await response.json()
+        roles.forEach(role => {
+            let selectedRole = false
+            for (let i = 0; i < userDelete.roles.length; i++) {
+                if (userDelete.roles[i].name === role.name) {
+                    selectedRole = true
+                    break
                 }
-                let element = document.createElement("option")
-                element.text = role.name.substring(5)
-                element.value = role.id
-                if (selectedRole) element.selected = true
-                $('#deleteRolesUser')[0].appendChild(element)
-            })
+            }
+            let element = document.createElement("option")
+            element.text = role.name.substring(5)
+            element.value = role.id
+            if (selectedRole) element.selected = true
+            $('#deleteRolesUser')[0].appendChild(element)
         })
-
+    }catch (e) {
+        console.error(e)
+    }
 }
 
 //  редактирование пользователя
@@ -199,10 +197,9 @@ async function viewEditModal(id) {
     form.password.value = userEdit.password
 
     $('#editRolesUser').empty()
-
-    await fetch(url + '/roles')
-        .then(r => r.json())
-        .then(roles => {
+    try {
+        const response = await fetch(url + '/roles')
+        const roles = await response.json()
             roles.forEach(role => {
                 let selectedRole = false;
                 for (let i = 0; i < userEdit.roles.length; i++) {
@@ -216,9 +213,10 @@ async function viewEditModal(id) {
                 element.value = role.id
                 if (selectedRole) element.selected = true
                 $('#editRolesUser')[0].appendChild(element)
+
             })
-        })
-        .catch((error) => {
-            alert(error);
-        })
+         }
+        catch(e) {
+            console.error(e)
+        }
 }

@@ -24,13 +24,13 @@ public class AdmiRestController {
         this.roleService = roleService;
     }
     @GetMapping
-    public List<User> allUsers() {
-        return userService.findAll();
+    public ResponseEntity<List<User>> allUsers() {
+        return ResponseEntity.ok(userService.findAll());
     }
 
     @GetMapping("/{id}")
-    public User findUserById(@PathVariable("id") Long id) {
-        return userService.findById(id).get();
+    public ResponseEntity<User> findUserById(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(userService.findById(id).get());
     }
 
     @PostMapping("/addUser")
