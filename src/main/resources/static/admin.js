@@ -91,7 +91,7 @@ async function getUser(id) {
     return await response.json()
 }
 
-//  Модальное окно удаления пользователя
+//   Удаление пользователя
 function deleteUser() {
     const formDelete = document.forms["formDelete"]
     formDelete.addEventListener("submit", function (event) {
@@ -193,7 +193,7 @@ $(document).ready(function () {
 
 async function viewEditModal(id) {
     let userEdit = await getUser(id)
-    let form = document.forms["formEditUser"]
+    let form = document.forms["formEdit"]
     form.id.value = userEdit.id
     form.username.value = userEdit.username
     form.password.value = userEdit.password
